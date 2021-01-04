@@ -30,7 +30,7 @@ namespace TestDhamo
 
             Assert.Equal(2, 一行コンパイル("return 1*2"));
 
-            Assert.Equal(2, 一行コンパイル("return 1+2"));
+            Assert.Equal(3, 一行コンパイル("return 1+2"));
         }
     }
 }

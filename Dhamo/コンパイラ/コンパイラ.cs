@@ -25,22 +25,31 @@ namespace Dhamo.コンパイラ
 
         public ノード 実行(ノード node)
         {
-            if (node.種類 == ノード種別.乗算)
+            while (true)
             {
-                var node1 = 実行(node.左());
-                var node2 = 実行(node.右());
-                return new ノード(node1.値 * node2.値);
-            }
-            else if (node.種類 == ノード種別.整数)
-            {
+                if (node.種類 == ノード種別.加算)
+                {
+                    var node1 = 実行(node.左());
+                    var node2 = 実行(node.右());
+                    return new ノード(node1.値 + node2.値);
+                }
+                else if (node.種類 == ノード種別.乗算)
+                {
+                    var node1 = 実行(node.左());
+                    var node2 = 実行(node.右());
+                    return new ノード(node1.値 * node2.値);
+                }
+                else if (node.種類 == ノード種別.整数)
+                {
+                    return node;
+                }
+                else if (node.種類 == ノード種別.リターン)
+                {
+                    node = new ノード(実行(node.左()).値);
+                }
+
                 return node;
             }
-            else if (node.種類 == ノード種別.リターン)
-            {
-                node = new ノード(実行(node.左()).値);
-            }
-
-            return node;
         }
     }
 }

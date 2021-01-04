@@ -27,8 +27,27 @@ namespace Dhamo.パーサー
         }
         public static ノード 評価(LinkedList<トークン> トークン列)
         {
-            var node = 乗算(トークン列);
+            var node = 加算(トークン列);
             return node;
+        }
+
+        public static ノード 加算(LinkedList<トークン> トークン列)
+        {
+            var node = 乗算(トークン列);
+
+            while (true)
+            {
+                if (トークン列.Count > 0 && トークン列.First.Value == new トークン(トークン種別.記号, "+"))
+                {
+                    // +を削除
+                    トークン列.RemoveFirst();
+                    node = new ノード(ノード種別.加算, new List<ノード> { node, 乗算(トークン列) });
+                }
+                else
+                {
+                    return node;
+                }
+            }
         }
 
         public static ノード 乗算(LinkedList<トークン> トークン列)
