@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Dhamo": {
+      "commandName": "Project",
+      "nativeDebugging": false
+    }
+  }
+}
