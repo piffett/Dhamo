@@ -37,7 +37,7 @@ namespace Dhamo.パーサー
 
             while (true)
             {
-                if (トークン列.Count > 0 && トークン列.First.Value == new トークン(トークン種別.記号, "+"))
+                if (トークン列.期待トークン(new トークン(トークン種別.記号, "+")))
                 {
                     // +を削除
                     トークン列.RemoveFirst();
@@ -56,7 +56,7 @@ namespace Dhamo.パーサー
 
             while (true)
             {
-                if (トークン列.Count > 0 && トークン列.First.Value == new トークン(トークン種別.記号, "*"))
+                if (トークン列.期待トークン(new トークン(トークン種別.記号, "*")))
                 {
                     // 「*」を削除
                     トークン列.RemoveFirst();
@@ -69,8 +69,22 @@ namespace Dhamo.パーサー
             }
         }
 
+        //public static ノード 単項演算子(LinkedList<トークン> トークン列)
+        //{
+
+        //}
+
         public static ノード 値(LinkedList<トークン> トークン列)
         {
+            if (トークン列.期待トークン(new トークン(トークン種別.記号, "(")))
+            {
+                // 「(」削除
+                トークン列.RemoveFirst();
+                var exprNode = 評価(トークン列);
+                // 「)」削除
+                トークン列.RemoveFirst();
+                return exprNode;
+            }
             var node = new ノード(トークン列.First.Value.トークン数値);
             トークン列.RemoveFirst();
             return node;

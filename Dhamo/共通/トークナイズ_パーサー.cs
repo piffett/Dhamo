@@ -114,6 +114,8 @@ namespace Dhamo.共通
 
         public static bool 期待トークン(this LinkedList<トークン> self, トークン token)
         {
+            if (self.Count == 0) return false;
+
             if (self.First.Value.Equals(token)) return true;
 
             return false;
