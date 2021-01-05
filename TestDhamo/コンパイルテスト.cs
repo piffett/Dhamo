@@ -36,5 +36,13 @@ namespace TestDhamo
 
             Assert.Equal(9, 一行コンパイル("return (1+2)*3"));
         }
+
+        [Fact]
+        public void 複行コンパイルテスト()
+        {
+            Assert.Equal(1, new コンパイラ(new string[] { "a = 1", "return a" }).コンパイル());
+        }
+
+
     }
 }

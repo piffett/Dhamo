@@ -63,6 +63,7 @@ namespace Dhamo.共通
 
     public enum ノード種別
     {
+        ブロック, // 同じインデントが続く区切り
         整数,     // 231
         リターン, // return
         乗算,     // *

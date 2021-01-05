@@ -23,7 +23,7 @@ namespace TestDhamo
             Assert.Equal("aaa", list.Last.Value);
         }
 
-        public void 参照テスト(LinkedList<string> list)
+        void 参照テスト(LinkedList<string> list)
         {
             list.AddLast("aaa");
         }

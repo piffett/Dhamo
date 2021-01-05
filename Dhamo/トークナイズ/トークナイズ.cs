@@ -31,10 +31,16 @@ namespace Dhamo.トークナイズ
                 列 += text.Length - 可変行テキスト.Length;
                 トークン列.AddLast(new トークン(トークン種別.インデント, 列));
 
-
-                while (先頭トークナイズ(トークン列, ref 可変行テキスト).Item1)
+                try
                 {
-                    Debug.WriteLine(可変行テキスト);
+                    while (先頭トークナイズ(トークン列, ref 可変行テキスト).Item1)
+                    {
+                        Debug.WriteLine(可変行テキスト);
+                    }
+                }
+                catch (Exception)
+                {
+                    throw new トークナイズ例外(トークナイズエラーメッセージ(text, トークナイズ実行行数, 列));
                 }
             }
 
@@ -179,23 +185,19 @@ namespace Dhamo.トークナイズ
             return (true, 長さ);
         }
 
+        private static string トークナイズエラーメッセージ(string 固定テキスト, int 実行完了行数, int 列)
+        {
+            return $"プログラムの解析に失敗しました。 {実行完了行数}行目" + Environment.NewLine + 固定テキスト + Environment.NewLine + new String(' ', 列) + $"^トークナイズできません。";
+        }
+
     }
 
     [Serializable()]
     class トークナイズ例外 : Exception
     {
-        public トークナイズ例外()
-            : base() { }
-
         public トークナイズ例外(string message)
-            : base() { }
-
-        public トークナイズ例外(string 固定テキスト, int 実行完了行数, int 列) : base()
-        {
-            Console.WriteLine($"プログラムの解析に失敗しました。 {実行完了行数}行目" + Environment.NewLine + 固定テキスト + Environment.NewLine + new String(' ', 列) + $"^トークナイズできません。");
-        }
-
-        protected トークナイズ例外(SerializationInfo info, StreamingContext context)
-        : base(info, context) { }
+            : base(message) { }
     }
+
+
 }

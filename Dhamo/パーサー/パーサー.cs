@@ -7,11 +7,27 @@ namespace Dhamo.パーサー
 {
     public static class パーサー
     {
-        // TODO 現状一行しか対応していないので複数行で対応する
+        // 複数行の同一インデントをブロックとして処理
+        // TODO: インデントが変わった時の取り扱いなどは未実装
+        public static ノード ブロック(LinkedList<トークン> トークン列)
+        {
+            var node = new ノード(ノード種別.ブロック);
 
+            var ノード列 = new List<ノード>();
+            while (トークン列.Count > 0)
+            {
+                // インデントのトークンをとりあえず削除
+                トークン列.先頭ポップ(new トークン(トークン種別.インデント, 0));
+                ノード列.Add(ステートメント(トークン列));
+            }
+            node.子ノード列 = ノード列;
+
+            return node;
+        }
+
+        // TODO 現状一行しか対応していないので複数行で対応する
         public static ノード ステートメント(LinkedList<トークン> トークン列)
         {
-            var ノード列 = new List<ノード>();
             var node = new ノード();
 
             // インデントのトークンをとりあえず削除
