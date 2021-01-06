@@ -16,11 +16,11 @@ namespace Dhamo.コンパイラ
             this.テキスト列 = テキスト列;
         }
 
-        public int コンパイル()
+        public 値 コンパイル()
         {
             var a = パーサー.パーサー.ステートメント(トークナイザ.トークナイズ(テキスト列));
             var b = 実行(a);
-            return b.値;
+            return b.value;
         }
 
         public ノード 実行(ノード node)
@@ -31,13 +31,13 @@ namespace Dhamo.コンパイラ
                 {
                     var node1 = 実行(node.左());
                     var node2 = 実行(node.右());
-                    return new ノード(node1.値 + node2.値);
+                    return new ノード(node1.value + node2.value);
                 }
                 else if (node.種類 == ノード種別.乗算)
                 {
                     var node1 = 実行(node.左());
                     var node2 = 実行(node.右());
-                    return new ノード(node1.値 * node2.値);
+                    return new ノード(node1.value * node2.value);
                 }
                 else if (node.種類 == ノード種別.整数)
                 {
@@ -45,11 +45,19 @@ namespace Dhamo.コンパイラ
                 }
                 else if (node.種類 == ノード種別.リターン)
                 {
-                    node = new ノード(実行(node.左()).値);
+                    node = 実行(node.左());
+                }
+                else if (node.種類 == ノード種別.等号)
+                {
+                    var node1 = 実行(node.左());
+                    var node2 = 実行(node.右());
+                    return new ノード(new 値(node1.value== node2.value));
                 }
 
                 return node;
             }
         }
     }
+
+    
 }

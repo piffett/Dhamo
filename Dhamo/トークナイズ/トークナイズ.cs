@@ -93,6 +93,15 @@ namespace Dhamo.トークナイズ
                 return (true, 文字数);
             }
 
+            if (識別子文字数(可変行テキスト) != 0)
+            {
+                var 文字数 = 識別子文字数(可変行テキスト);
+                var token = new トークン(トークン種別.識別子, 可変行テキスト.Substring(0, 文字数));
+                トークン列.AddLast(token);
+                可変行テキスト = 可変行テキスト.Remove(0, 文字数);
+                return (true, 文字数);
+            }
+
             throw new NotImplementedException("このコードには到達しません");
 
         }
@@ -100,8 +109,12 @@ namespace Dhamo.トークナイズ
         // その文字が記号化どうかを判定し、記号の時は文字数を返します
         private static int 記号判定(string 判定文字列)
         {
-            var 一文字記号文字 = new char[] { ':', '[', ']', ',', '=', '{', '}', '.', '(', ')', '!', '\'', '*', '+' };
-            if (判定文字列.StartsWith("=="))
+            var 一文字記号文字 = new char[] { ':', '[', ']', ',', '=', '{', '}', '.', '(', ')', '!', '\'', '*', '+', '>', '<' };
+            if (判定文字列.StartsWith("==") ||
+                判定文字列.StartsWith("!=") ||
+                判定文字列.StartsWith("<=") ||
+                判定文字列.StartsWith(">=")
+                )
             {
                 return 2;
             }
@@ -127,7 +140,8 @@ namespace Dhamo.トークナイズ
             return 0;
         }
 
-        private static int 文字列文字数(string テキスト)
+        // 変数名など
+        private static int 識別子文字数(string テキスト)
         {
             var 長さ = 0;
             while (true)
