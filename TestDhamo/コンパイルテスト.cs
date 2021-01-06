@@ -38,9 +38,11 @@ namespace TestDhamo
 
             Assert.Equal(new 値(false), 一行コンパイル("return 1 == 3"));
 
-            Assert.Equal(new 値(true), 一行コンパイル("return 2 == 2"));
+            Assert.Equal(new 値(true), 一行コンパイル("return 2 == 1+1"));
 
             Assert.Equal(new 値(false), 一行コンパイル("return 1 < 1"));
+
+            Assert.Equal(new 値(true), 一行コンパイル("return 1+9 > 5"));
 
             //Assert.Equal(new 値(true), 一行コンパイル("return 1 <= 1"));
         }

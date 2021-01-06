@@ -75,7 +75,7 @@ namespace Dhamo.共通
     public class 値
     {
         int type; // 0 bool 1 int 2 string
-        bool a;
+        public bool a;
         int b;
         string c;
         public 値(bool a)
@@ -135,6 +135,23 @@ namespace Dhamo.共通
         public static bool operator !=(値 c1, 値 c2)
         {
             return !(c1 == c2);
+        }
+
+        public static 値 operator <(値 v1, 値 v2)
+        {
+            if (v1.type == 0 && v2.type == 0) return new 値(false);
+
+            if (v1.type == 1 && v2.type == 1) return new 値(v1.b < v2.b);
+
+            if (v1.type == 2 && v2.type == 2) return new 値(false);
+
+            return new 値(false);
+        }
+
+        public static 値 operator >(値 v1, 値 v2)
+        {
+            // TODO: 文字列と数値みたいな組み合わせにも対応する
+            return new 値(!(v1 < v2).a);
         }
 
         public override bool Equals(object obj)

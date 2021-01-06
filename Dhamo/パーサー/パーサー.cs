@@ -66,7 +66,12 @@ namespace Dhamo.パーサー
                 トークン列.RemoveFirst();
                 node = new ノード(ノード種別.比較, new List<ノード> { node, 加算(トークン列) });
             }
-            return node;
+            else if (トークン列.期待トークン(new トークン(トークン種別.記号, ">")))
+            {
+                トークン列.RemoveFirst();
+                node = new ノード(ノード種別.比較, new List<ノード> {  加算(トークン列), node });
+            }
+                    return node;
         }
 
         public static ノード 加算(LinkedList<トークン> トークン列)

@@ -53,6 +53,12 @@ namespace Dhamo.コンパイラ
                     var node2 = 実行(node.右());
                     return new ノード(new 値(node1.value == node2.value));
                 }
+                else if (node.種類 == ノード種別.比較)
+                {
+                    var node1 = 実行(node.左());
+                    var node2 = 実行(node.右());
+                    return new ノード(node1.value < node2.value);
+                }
 
                 return node;
             }
