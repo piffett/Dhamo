@@ -51,7 +51,7 @@ namespace Dhamo.コンパイラ
                 {
                     var node1 = 実行(node.左());
                     var node2 = 実行(node.右());
-                    return new ノード(new 値(node1.value== node2.value));
+                    return new ノード(new 値(node1.value == node2.value));
                 }
 
                 return node;
@@ -59,5 +59,5 @@ namespace Dhamo.コンパイラ
         }
     }
 
-    
+
 }
