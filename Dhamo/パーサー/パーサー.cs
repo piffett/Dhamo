@@ -17,7 +17,7 @@ namespace Dhamo.パーサー
             while (トークン列.Count > 0)
             {
                 // インデントのトークンをとりあえず削除
-                トークン列.先頭ポップ(new トークン(トークン種別.インデント, 0));
+                トークン列.RemoveFirst();
                 ノード列.Add(ステートメント(トークン列));
             }
             node.子ノード列 = ノード列;
@@ -30,20 +30,34 @@ namespace Dhamo.パーサー
         {
             var node = new ノード();
 
-            // インデントのトークンをとりあえず削除
-            トークン列.RemoveFirst();
-
             if (トークン列.First.Value == (new トークン(トークン種別.リターン, "return")))
             {
                 node = new ノード(ノード種別.リターン);
                 トークン列.RemoveFirst();
                 node.左(評価(トークン列));
+                return node;
             }
-            return node;
+            else
+            {
+                node = 評価(トークン列);
+                return node;
+            }
+
         }
         public static ノード 評価(LinkedList<トークン> トークン列)
         {
+            var node = 代入(トークン列);
+            return node;
+        }
+
+        public static ノード 代入(LinkedList<トークン> トークン列)
+        {
             var node = 等号(トークン列);
+            if (トークン列.期待トークン(new トークン(トークン種別.記号, "=")))
+            {
+                トークン列.RemoveFirst();
+                node = new ノード(ノード種別.代入, new List<ノード> { node, 代入(トークン列) });
+            }
             return node;
         }
 
@@ -69,9 +83,20 @@ namespace Dhamo.パーサー
             else if (トークン列.期待トークン(new トークン(トークン種別.記号, ">")))
             {
                 トークン列.RemoveFirst();
-                node = new ノード(ノード種別.比較, new List<ノード> {  加算(トークン列), node });
+                node = new ノード(ノード種別.比較, new List<ノード> { 加算(トークン列), node });
             }
-                    return node;
+            else if (トークン列.期待トークン(new トークン(トークン種別.記号, "<=")))
+            {
+                トークン列.RemoveFirst();
+                node = new ノード(ノード種別.等比較, new List<ノード> { node, 加算(トークン列) });
+
+            }
+            else if (トークン列.期待トークン(new トークン(トークン種別.記号, ">=")))
+            {
+                トークン列.RemoveFirst();
+                node = new ノード(ノード種別.等比較, new List<ノード> { 加算(トークン列), node });
+            }
+            return node;
         }
 
         public static ノード 加算(LinkedList<トークン> トークン列)
@@ -128,9 +153,19 @@ namespace Dhamo.パーサー
                 トークン列.RemoveFirst();
                 return exprNode;
             }
-            var node = new ノード(new 値(トークン列.First.Value.トークン数値));
-            トークン列.RemoveFirst();
-            return node;
+
+            if (トークン列.First.Value.種別 == トークン種別.識別子)
+            {
+                var node = new ノード(new 値(トークン列.First.Value.トークン文字列));
+                トークン列.RemoveFirst();
+                return node;
+            }
+            else
+            {
+                var node = new ノード(new 値(トークン列.First.Value.トークン数値));
+                トークン列.RemoveFirst();
+                return node;
+            }
         }
     }
 }

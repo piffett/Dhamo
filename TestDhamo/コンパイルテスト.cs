@@ -44,13 +44,15 @@ namespace TestDhamo
 
             Assert.Equal(new 値(true), 一行コンパイル("return 1+9 > 5"));
 
-            //Assert.Equal(new 値(true), 一行コンパイル("return 1 <= 1"));
+            Assert.Equal(new 値(true), 一行コンパイル("return 1 <= 1"));
+
+            Assert.Equal(new 値(false), 一行コンパイル("return 2 <= 1"));
         }
 
         [Fact]
         public void 複行コンパイルテスト()
         {
-            //Assert.Equal(1, new コンパイラ(new string[] { "a = 1", "return a" }).コンパイル());
+            Assert.Equal(new 値(5), new コンパイラ(new string[] { "a = 5", "return a" }).コンパイル());
         }
 
 

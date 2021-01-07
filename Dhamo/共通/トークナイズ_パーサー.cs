@@ -75,12 +75,19 @@ namespace Dhamo.共通
 
         public override string ToString()
         {
-            return this.トークン文字列;
+            if (this.トークン文字列 != null)
+            {
+                return this.トークン文字列;
+            }
+            else
+            {
+                return this.種別.ToString();
+            }
         }
     }
     public enum トークン種別
     {
-        識別子,              // 変数名なんかになったり
+        識別子,            // 変数名なんかになったり
         文字列,            // "aaaa"
         数値,              // 数値
         記号,              // / [ ] ( ) , { }

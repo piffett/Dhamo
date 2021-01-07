@@ -6,31 +6,37 @@ namespace Dhamo.共通
 {
     public class ノード
     {
-        public ノード種別 種類;
+        public ノード種別 種別;
         public List<ノード> 子ノード列 = new List<ノード>();
         public 値 value;
-        int 変数先;
         public ノード()
         {
         }
 
         public ノード(ノード種別 種類)
         {
-            this.種類 = 種類;
+            this.種別 = 種類;
         }
         public ノード(ノード種別 種類, List<ノード> ノード列)
         {
-            this.種類 = 種類;
+            this.種別 = 種類;
             this.子ノード列 = ノード列;
         }
         public ノード(値 値)
         {
-            this.種類 = ノード種別.整数;
+            if (値.type == 1)
+            {
+                this.種別 = ノード種別.整数;
+            }
+            else if (値.type == 2)
+            {
+                this.種別 = ノード種別.識別子;
+            }
             this.value = 値;
         }
         public ノード(ノード種別 種類, string 文字列)
         {
-            this.種類 = 種類;
+            this.種別 = 種類;
             this.value = new 値(文字列);
         }
 
@@ -58,10 +64,16 @@ namespace Dhamo.共通
                 this.子ノード列.Add(node);
             }
         }
+
+        public override string ToString()
+        {
+            return this.種別.ToString();
+        }
     }
 
     public enum ノード種別
     {
+        謎,       // デバック用
         ブロック, // 同じインデントが続く区切り
         整数,     // 231
         リターン, // return
@@ -69,12 +81,15 @@ namespace Dhamo.共通
         加算,     // +
         等号,     // ==
         比較,     // <
+        等比較,   // <=
+        代入,     // a = 1
+        識別子,   // a
     }
 
 
     public class 値
     {
-        int type; // 0 bool 1 int 2 string
+        public int type; // 0 bool 1 int 2 string
         public bool a;
         int b;
         string c;
@@ -92,6 +107,11 @@ namespace Dhamo.共通
         {
             type = 2;
             this.c = c;
+        }
+
+        public string 名前()
+        {
+            return c;
         }
         public static 値 operator +(値 v1, 値 v2)
         {
@@ -135,6 +155,23 @@ namespace Dhamo.共通
         public static bool operator !=(値 c1, 値 c2)
         {
             return !(c1 == c2);
+        }
+
+        public static 値 operator <=(値 v1, 値 v2)
+        {
+            if (v1.type == 0 && v2.type == 0) return new 値(false);
+
+            if (v1.type == 1 && v2.type == 1) return new 値(v1.b <= v2.b);
+
+            if (v1.type == 2 && v2.type == 2) return new 値(false);
+
+            return new 値(false);
+        }
+
+        public static 値 operator >=(値 v1, 値 v2)
+        {
+            // TODO: 文字列と数値みたいな組み合わせにも対応する
+            return new 値(!(v1 < v2).a);
         }
 
         public static 値 operator <(値 v1, 値 v2)
